@@ -25,6 +25,7 @@ import argparse
 import pkg_resources
 import subprocess
 import sys
+import ast
 
 import virtdeploy
 import virtdeploy.errors
@@ -38,7 +39,8 @@ EXITCODE_KEYBINT = 130
 
 def instance_create(args):
     driver = virtdeploy.get_driver(DRIVER)
-    instance = driver.instance_create(args.id, args.template)
+    options=ast.literal_eval(args.options)
+    instance = driver.instance_create(args.id, args.template,**options)
 
     print('name: {0}'.format(instance['name']))
     print('root password: {0}'.format(instance['password']))
@@ -109,7 +111,9 @@ def parse_command_line(cmdline):
     version = pkg_resources.get_distribution('virt-deploy').version
     parser.add_argument('-v', '--version', action='version',
                         version='%(prog)s {0}'.format(version))
-
+    parser.add_argument('-o', '--options', action='store',default="{}",
+                        help='add options in python format {a:b, c:d}')
+    
     cmd = parser.add_subparsers(dest='command')
 
     cmd_create = cmd.add_parser('create', help='create a new instance')
