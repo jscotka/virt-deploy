@@ -253,7 +253,7 @@ def _get_image_os(image):
         return image.replace('-', '')
     if image in stdtable:
         return image
-    else
+    else:
         return "fedora20"
 
 
