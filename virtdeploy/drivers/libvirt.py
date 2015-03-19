@@ -245,10 +245,16 @@ class VirtDeployLibvirtDriver(VirtDeployDriverBase):
 
 
 def _get_image_os(image):
-    try:
+    if image in _IMAGE_OS_TABLE:
         return _IMAGE_OS_TABLE[image]
-    except KeyError:
+    stdout, _ = execute(('osinfo-query', '--fields=short-id', 'os'), stdout=subprocess.PIPE)
+    stdtable=stdout.split()
+    if image.replace('-', '') in stdtable:
         return image.replace('-', '')
+    if image in stdtable:
+        return image
+    else
+        return "fedora20"
 
 
 def _create_base(template, arch, repository):
