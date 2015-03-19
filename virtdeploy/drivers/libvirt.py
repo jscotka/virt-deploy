@@ -247,7 +247,8 @@ class VirtDeployLibvirtDriver(VirtDeployDriverBase):
 def _get_image_os(image):
     if image in _IMAGE_OS_TABLE:
         return _IMAGE_OS_TABLE[image]
-    stdout, _ = execute(('osinfo-query', '--fields=short-id', 'os'), stdout=subprocess.PIPE)
+    stdout, _ = execute(('osinfo-query', '--fields=short-id', 'os'),
+                        stdout=subprocess.PIPE)
     stdtable=stdout.split()
     if image.replace('-', '') in stdtable:
         return image.replace('-', '')
